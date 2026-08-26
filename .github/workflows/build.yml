@@ -77,3 +77,15 @@ jobs:
           exit 1
         fi
         echo "built: $found"
+
+  lunasvg-crash:
+    # The renderer runs in Kodi's process, so a crash on a hostile SVG is a
+    # crash of Kodi. Guards live in depends/common/lunasvg/; this proves they
+    # work and that they do not change valid output. See tests/lunasvg-crash.
+    name: "lunasvg crash regression"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout add-on repo
+      uses: actions/checkout@v5
+    - name: Run the regression test
+      run: tests/lunasvg-crash/run.sh
