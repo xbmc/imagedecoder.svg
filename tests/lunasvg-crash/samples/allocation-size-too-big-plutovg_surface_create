@@ -1,0 +1,29 @@
+<?xml ve.0"?>
+<svg xmlns="ht"
+  xmlns:xlwidth="1" height="1"> <rect width="55550" height="50" fill="blue"/>
+<rc>
+</script>
+<defs>
+  <!--. -->
+  <pattern id="patternBase" width="1" hex="32" y="20" width="160" height="160" stroke-width="é0"
+fill="urSt)" stroke="urlR2)" ight="1"> <rect width="50" height="50" fill="blue"/>
+<rect x="50" width="50" height="50" fill="red"/> <rect y="50" width="50" height="50" fill="red"/> <rect x="50" y="50" width="50" height="50" fill="blue"/>
+  </pattern>
+  <!-- 2e. -->
+  <pattern xlink:href="#patternBase" id=""/>
+  <!-- 3e. -->
+  <pattern width="100" heigxlink:href="#pse" id="patternRefWithTransform"
+    patternTransform=""/>
+  <!--im-ern---01 -->
+</defs>
+<rect width="100" height="100" stroke="black"
+  fill="url(#patternBase)"/>
+<g transform="translate(100)">
+* <rect width="100" height="100" stroke="black"
+    fill="url(#patternRefWithoutTransform)"/>
+</g>
+<g transform="translate(200)">
+  <rect width="100" height="100" stroke="black"
+    fill="url(#patternRefWithTransform)"/>
+</g>
+</svg>
