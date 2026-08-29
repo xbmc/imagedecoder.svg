@@ -97,6 +97,7 @@ bool SvgPicture::LoadImageFromMemory(const std::string& mimetype,
 }
 
 bool SvgPicture::Decode(uint8_t* pixels,
+                        size_t pixelBufferSize,
                         unsigned int width,
                         unsigned int height,
                         unsigned int pitch,
@@ -119,10 +120,22 @@ bool SvgPicture::Decode(uint8_t* pixels,
 
   // Decode() gets its size from Kodi independently of LoadImageFromMemory(),
   // so re-check rather than risk a runaway allocation.
-  if (width > kMaxPlausibleHint || height > kMaxPlausibleHint)
+  if (width == 0 || height == 0 || width > kMaxPlausibleHint || height > kMaxPlausibleHint)
   {
     kodi::Log(ADDON_LOG_ERROR, "%s: Refusing implausible decode size %ux%u", __func__, width,
               height);
+    return false;
+  }
+
+  // What the copy loop below actually reaches: every row starts at y * pitch,
+  // and the last one writes width * 4 bytes into it. Kodi passes pitch * height,
+  // which is never smaller, but the point of the argument is not to trust that.
+  const size_t reach = static_cast<size_t>(height - 1) * pitch + static_cast<size_t>(width) * 4;
+  if (reach > pixelBufferSize)
+  {
+    kodi::Log(ADDON_LOG_ERROR,
+              "%s: Output buffer too small: %ux%u at pitch %u reaches %zu bytes, was given %zu",
+              __func__, width, height, pitch, reach, pixelBufferSize);
     return false;
   }
 

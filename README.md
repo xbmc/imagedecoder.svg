@@ -24,8 +24,9 @@ with correct transparency.
 > Correct **transparency** additionally requires a core Kodi fix: `CImageDecoder` never set
 > `IImage::m_hasAlpha`, so every `kodi.imagedecoder` addon's output was treated as fully
 > opaque. Without that fix SVG textures render with a black background. The fix is generic
-> (it benefits `imagedecoder.heif`/`.raw`/`.mpo` equally) and has been submitted to
-> `xbmc/xbmc` as [PR #29024](https://github.com/xbmc/xbmc/pull/29024).
+> (it benefits `imagedecoder.heif`/`.raw`/`.mpo` equally) and reached `xbmc/xbmc` as
+> [PR #29068](https://github.com/xbmc/xbmc/pull/29068), which also raises the ImageDecoder
+> instance API to 3.1.0 — the version this add-on now builds against.
 
 ## Known limitations
 
