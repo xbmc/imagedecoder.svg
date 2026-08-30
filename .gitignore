@@ -17,8 +17,8 @@ imagedecoder.svg/addon.xml
 .vs/
 
 # General MacOS
-.DS_Store
 .AppleDouble
+.DS_Store
 .LSOverride
 
 # local-only working files, never part of the addon
