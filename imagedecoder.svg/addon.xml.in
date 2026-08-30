@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="imagedecoder.svg"
-  version="1.0.0"
+  version="1.1.0"
   name="SVG image decoder"
   provider-name="cinemaONE">
   <requires>@ADDON_DEPENDS@</requires>
@@ -32,9 +32,13 @@
     <description lang="en_GB">Scalable Vector Graphics (SVG) is a vector image format, rendered
 sharp at any requested resolution instead of a single fixed pixel size.[CR][CR]Rendering is
 provided by lunasvg (https://github.com/sammycage/lunasvg), MIT licensed.</description>
-    <news>v1.0.0 (2026-08-21)
+    <news>v1.1.0 (2026-08-29)
+- Requires ImageDecoder API 3.1.0: Decode() now receives the output buffer size.
+- Refuses to decode when the buffer cannot hold the rows it would write.
+
+v1.0.0 (2026-08-21)
 - Initial release.
 - Decodes SVG at the size the file itself declares, capped at 4096px.
-- Requires Kodi with the CImageDecoder hasAlpha fix (xbmc/xbmc#29024) for transparency.</news>
+- Requires Kodi with the CImageDecoder hasAlpha fix (xbmc/xbmc#29068) for transparency.</news>
   </extension>
 </addon>
