@@ -55,43 +55,45 @@ bool SvgPicture::LoadImageFromMemory(const std::string& mimetype,
     return false;
   }
 
-  if (width == 0 || height == 0 || width > kMaxPlausibleHint || height > kMaxPlausibleHint)
+  double docWidth = m_document->width();
+  double docHeight = m_document->height();
+  if (docWidth <= 0 || docHeight <= 0)
   {
-    double docWidth = m_document->width();
-    double docHeight = m_document->height();
-    if (docWidth <= 0 || docHeight <= 0)
-    {
-      docWidth = kNativeSize;
-      docHeight = kNativeSize;
-    }
-
-    // The size the SVG declares is the size it gets decoded at. Neither the
-    // skin control's size nor the output resolution ever reaches an image
-    // decoder, so the file itself is the only place the intended resolution
-    // can be expressed - an asset meant to be drawn at 200px on a 4K screen
-    // says so, and gets rasterized at exactly that. kNativeSize is only the
-    // fallback for a file that declares no usable size at all.
-    //
-    // Only an upper bound is enforced, to keep a malformed or hostile file
-    // from asking for an allocation that is never a plausible UI texture.
-    const double longSide = std::max(docWidth, docHeight);
-    if (longSide > kMaxPlausibleHint)
-    {
-      const double shrink = kMaxPlausibleHint / longSide;
-      docWidth *= shrink;
-      docHeight *= shrink;
-    }
-
-    width = static_cast<unsigned int>(docWidth + 0.5);
-    height = static_cast<unsigned int>(docHeight + 0.5);
+    docWidth = kNativeSize;
+    docHeight = kNativeSize;
   }
 
-  if (width == 0 || height == 0)
+  // The size the SVG declares is the size it gets decoded at. Neither the
+  // skin control's size nor the output resolution ever reaches an image
+  // decoder, so the file itself is the only place the intended resolution
+  // can be expressed - an asset meant to be drawn at 200px on a 4K screen
+  // says so, and gets rasterized at exactly that. kNativeSize is only the
+  // fallback for a file that declares no usable size at all.
+  //
+  // Only an upper bound is enforced, to keep a malformed or hostile file
+  // from asking for an allocation that is never a plausible UI texture.
+  const double longSide = std::max(docWidth, docHeight);
+  if (longSide > kMaxPlausibleHint)
   {
-    kodi::Log(ADDON_LOG_ERROR, "%s: SVG has no usable intrinsic size and none was requested",
-              __func__);
-    return false;
+    const double shrink = kMaxPlausibleHint / longSide;
+    docWidth *= shrink;
+    docHeight *= shrink;
   }
+
+  // Kodi's width/height is an upper bound, not a size to render at
+  if (width > 0 && height > 0)
+  {
+    const double fit = std::min(width / docWidth, height / docHeight);
+    if (fit < 1.0)
+    {
+      docWidth *= fit;
+      docHeight *= fit;
+    }
+  }
+
+  // At least 1 px, so a very thin SVG isn't rounded away
+  width = std::max(1u, static_cast<unsigned int>(docWidth + 0.5));
+  height = std::max(1u, static_cast<unsigned int>(docHeight + 0.5));
 
   return true;
 }
